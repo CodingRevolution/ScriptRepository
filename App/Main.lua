@@ -66,7 +66,7 @@ local function unserialize( s )
 	local func, err = loadstring( "return "..s, "unserialize" )
 	if func then
 		local env = {}
-		setmetatable(env,{__index = _G}
+		setmetatable(env,{__index = _G})
 		setfenv( func, env ) )
 		local ok, result = pcall( func )
 		if ok then
