@@ -20,6 +20,7 @@ local Lists = {
 local Buffers = {
 	Layouts = {},
 }
+local Layouts = {}
 
 --Functions--
 local function parse(sText,sPattern)
@@ -84,10 +85,10 @@ local function loadLayouts()
 end
 
 local function initializeLayouts()
-	gui.loadObjects()
+	for i,v in pairs(Buffers.Layouts) do
+		Layouts[i] = gui.loadObjects(v)
+	end
 end
-
-
 
 --Code--
 print("Working")
