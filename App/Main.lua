@@ -65,7 +65,9 @@ local web = {
 local function unserialize( s )
 	local func, err = loadstring( "return "..s, "unserialize" )
 	if func then
-		setfenv( func, setmetatable({},{__index = _G}) )
+		local env = {}
+		setmetatable(env,{__index = _G}
+		setfenv( func, env ) )
 		local ok, result = pcall( func )
 		if ok then
 			return result
