@@ -1,0 +1,727 @@
+--[[
+	Interact API in ComputerCraft
+	by Creator
+	Complete rewrite in OOP
+]]--
+
+
+local textutilsserialize = textutils.serialize
+local textutilsunserialize = textutils.unserialize
+
+--Class declarations--
+local Button = {}
+local Layout = {}
+local Toggle = {}
+local BackgroundColor = {}
+local ColorField = {}
+local BetterPaint = {}
+local Text = {}
+local TextBox = {}
+
+function loadObjects(self)
+	local output = {}
+	output.Button = {}
+	output.Toggle = {}
+	output.ColorField = {}
+	output.BetterPaint = {}
+	output.Text = {}
+	output.TextBox = {}
+	for o,v in pairs(output) do
+		if self[o] == nil then
+			self[o] = {}
+		end
+	end
+	for i,v in pairs(self.Button) do
+		output.Button[i] = Button.new(self.Button[i])
+	end
+	for i,v in pairs(self.Toggle) do
+		output.Toggle[i] = Toggle.new(self.Toggle[i])
+	end
+	for i,v in pairs(self.ColorField) do
+		output.ColorField[i] = ColorField.new(self.ColorField[i])
+	end
+	for i,v in pairs(self.BetterPaint) do
+		output.BetterPaint[i] = BetterPaint.new(self.BetterPaint[i])
+	end
+	for i,v in pairs(self.Text) do
+		output.Text[i] = Text.new(self.Text[i])
+	end
+	for i,v in pairs(self.TextBox) do
+		output.TextBox[i] = TextBox.new(self.TextBox[i])
+	end
+	return output
+end
+
+function loadLayout(input,output)
+	for i,v in pairs(input.Button) do
+		output:addButton(input.Button[i])
+	end
+	for i,v in pairs(input.Toggle) do
+		output:addToggle(input.Toggle[i])
+	end
+	for i,v in pairs(input.ColorField) do
+		output:addColorField(input.ColorField[i])
+	end
+	for i,v in pairs(input.BetterPaint) do
+		output:addBetterPaint(input.BetterPaint[i])
+	end
+	for i,v in pairs(input.Text) do
+		output:addText(input.Text[i])
+	end
+	for i,v in pairs(input.TextBox) do
+		output:addTextBox(input.TextBox[i])
+	end
+end
+
+--Class Layout--
+--Layout initialization function--
+Layout.new = function(input)
+	local self = {}
+	setmetatable(self,{__index = Layout})
+	self.Button = {}
+	self.Toggle = {}
+	self.ColorField = {}
+	self.BetterPaint = {}
+	self.Text = {}
+	self.TextBox = {}
+	self.BackgroundColor = 1
+	self.xPos = input.xPos or 1
+	self.yPos = input.yPos or 1
+	self.xLength = input.xLength or 51
+	self.yLength = input.yLength or 19
+	self.nilClick = input.nilClick or false
+	return self
+end
+
+--Add element function--
+Layout.addButton = function(self,_elementData)
+	self.Button[_elementData.name] = _elementData
+end
+
+Layout.addToggle = function(self,_elementData)
+	self.Toggle[_elementData.name] = _elementData
+end
+
+Layout.addBackgroundColor = function(self,_elementData)
+	self.BackgroundColor = _elementData.color
+end
+
+Layout.addColorField = function(self,_elementData)
+	self.ColorField[_elementData.name] = _elementData
+end
+
+Layout.addBetterPaint = function(self,_elementData)
+	self.BetterPaint[_elementData.name] = _elementData
+end
+
+Layout.addText = function(self,_elementData)
+	self.Text[_elementData.name] = _elementData
+end
+
+Layout.addTextBox = function(self,_elementData)
+	self.TextBox[_elementData.name]
+	= _elementData
+end
+
+Layout.draw = function(self,xPlus,yPlus)
+	local buttonFunctions = {}
+	local toggleFunctions = {}
+	local colorFieldFunctions = {}
+	local betterPaintFunctions = {}
+	local textFunctions = {}
+	local textBoxFunctions = {}
+	setmetatable(buttonFunctions,{__index = Button})
+	setmetatable(toggleFunctions,{__index = Toggle})
+	setmetatable(colorFieldFunctions,{__index = ColorField})
+	setmetatable(betterPaintFunctions,{__index = BetterPaint})
+	setmetatable(textFunctions,{__index = Text})
+	setmetatable(textBoxFunctions,{__index = TextBox})
+	paintutils.drawFilledBox(self.xPos,self.yPos,self.xPos+self.xLength-1,self.yPos+self.yLength-1,self.BackgroundColor)
+	for i,v in pairs(self.ColorField) do
+		colorFieldFunctions.draw(v,self.xPos,self.yPos,xPlus,yPlus)
+	end
+	for i,v in pairs(self.Button) do
+		buttonFunctions.draw(v,self.xPos,self.yPos,xPlus,yPlus)
+	end
+	for i,v in pairs(self.BetterPaint) do
+		betterPaintFunctions.draw(v,self.xPos,self.yPos,xPlus,yPlus)
+	end
+	for i,v in pairs(self.Toggle) do
+		toggleFunctions.draw(v,self.xPos,self.yPos,xPlus,yPlus)
+	end
+	for i,v in pairs(self.Text) do
+		textFunctions.draw(v,self.xPos,self.yPos,xPlus,yPlus)
+	end
+	for i,v in pairs(self.TextBox) do
+		textBoxFunctions.draw(v,self.xPos,self.yPos,xPlus,yPlus)
+	end
+end
+
+--Class Button--
+--Button initialization function
+Button.new = function(input)
+	local self = {}
+	setmetatable(self,{__index = Button})
+	self.name = input.name
+	self.label = input.label
+	self.xPos = input.xPos
+	self.yPos = input.yPos
+	self.fgColor = input.fgColor
+	self.bgColor = input.bgColor
+	self.xLength = input.xLength
+	self.yLength = input.yLength
+	self.returnValue = input.returnValue
+	self.xTextPos = input.xTextPos
+	self.yTextPos = input.yTextPos
+	self.moveX = input.moveX or false
+	self.moveY = input.moveY or false
+	return self
+end
+
+--Draw function
+Button.draw = function(self,layoutX,layoutY,addX,addY)
+	layoutX = layoutX or 0
+	layoutY = layoutY or 0
+	if self.moveX then
+		addX = addX or 0
+	else
+		addX = 0
+	end
+	if self.moveY then
+		addY = addY or 0
+	else
+		addY = 0
+	end
+	local finalX = self.xPos + layoutX + addX - 1
+	local finalY = self.yPos + layoutY + addY - 1
+	self.finalX = finalX
+	self.finalY = finalY
+	local newText
+	if #self.label > self.xLength then
+		newText = string.sub(self.label,1,self.xLength)
+	else
+		newText = self.label
+	end
+	paintutils.drawFilledBox(finalX,finalY,finalX+self.xLength-1,finalY+self.yLength-1,self.bgColor)
+	term.setTextColor(self.fgColor)
+	term.setCursorPos(finalX+self.xTextPos-1,finalY+self.yTextPos-1)
+	term.write(newText)
+end
+
+--Return function--
+Button.returnData = function(self)
+	local toReturn = {}
+	for i,v in pairs(self) do
+		toReturn[i] = v
+	end
+	return toReturn
+end
+
+--Sample Input table--
+example = [[
+	example = {
+		name = "quickSettings",
+		label = ">",
+		xPos = 1,
+		yPos = 3,
+		xLength = 1,
+		yLength = 6,
+		xTextPos = 1,
+		yTextPos = 1,
+		fgColor = colors.blue,
+		bgColor = colors.lightGray,
+		returnValue = "quickSettings",
+	},
+]]
+
+--Class Toggle--
+--Initialize Toggle Object--
+Toggle.new = function(input)
+	local self = {}
+	setmetatable(self,{__index = Toggle})
+	self.name = input.name or "randomName"
+	self.state = input.state or true
+	self.xPos = input.xPos or 1
+	self.yPos = input.yPos or 1
+	self.trueColor = input.trueColor or colors.green
+	self.falseColor = input.falseColor or colors.red
+	self.trueText = input.trueText or "T"
+	self.falseText = input.falseText or "F"
+	self.selectedBg = input.selectedBg or colors.gray
+	self.notSelectedBg = input.notSelectedBg or colors.lightGray
+	self.returnValue = input.returnValue or "mmmmmmm"
+	self.moveX = input.moveX or false
+	self.moveY = input.moveY or false
+	return self
+end
+
+Toggle.draw = function(self,layoutX,layoutY,addX,addY)
+	layoutX = layoutX or 0
+	layoutY = layoutY or 0
+	if self.moveX then
+		addX = addX or 0
+	else
+		addX = 0
+	end
+	if self.moveY then
+		addY = addY or 0
+	else
+		addY = 0
+	end
+	local finalX = self.xPos + layoutX + addX - 1
+	local finalY = self.yPos + layoutY + addY - 1
+	self.finalX = finalX
+	self.finalY = finalY
+	term.setCursorPos(finalX,finalY)
+	if self.state == false then
+		term.setBackgroundColor(self.notSelectedBg)
+		term.setTextColor(self.trueColor)
+		term.write(string.sub(self.trueText,1,1))
+		term.setBackgroundColor(self.selectedBg)
+		term.setTextColor(self.falseColor)
+		term.write(" "..string.sub(self.falseText,1,1).." ")
+	elseif self.state == true then
+		term.setBackgroundColor(self.selectedBg)
+		term.setTextColor(self.trueColor)
+		term.write(" "..string.sub(self.trueText,1,1).." ")
+		term.setBackgroundColor(self.notSelectedBg)
+		term.setTextColor(self.falseColor)
+		term.write(string.sub(self.falseText,1,1))
+	end
+end
+
+Toggle.returnData = function(self)
+	local toReturn = {}
+	for i,v in pairs(self) do
+		toReturn[i] = v
+	end
+	return toReturn
+end
+
+function Toggle.toggle(self)
+	if self.state == true then
+		self.state = false
+	else
+		self.state = true
+	end
+end
+
+function Toggle.getState(self)
+	return self.state
+end
+
+--BackgroundColor Class--
+function BackgroundColor.new(input)
+	local self = {}
+	setmetatable(self,{__index = BackgroundColor})
+	self.color = input.color
+	return self
+end
+
+function BackgroundColor.setColor(self,color)
+	self.color = color
+end
+
+function BackgroundColor.returnData(self)
+	local toReturn = {}
+	for i,v in pairs(self) do
+		toReturn[i] = v
+	end
+	return toReturn
+end
+
+--ColorField Class--
+function ColorField.new(input)
+	local self = {}
+	setmetatable(self,{__index = ColorField})
+	self.name = input.name
+	self.xPos = input.xPos
+	self.yPos = input.yPos
+	self.xLength = input.xLength
+	self.yLength = input.yLength
+	self.color = input.color
+	self.moveX = input.moveX or false
+	self.moveY = input.moveY or false
+	return self
+end
+
+function  ColorField.draw(self,layoutX,layoutY,addX,addY)
+	layoutX = layoutX or 0
+	layoutY = layoutY or 0
+	if self.moveX then
+		addX = addX or 0
+	else
+		addX = 0
+	end
+	if self.moveY then
+		addY = addY or 0
+	else
+		addY = 0
+	end
+	local finalX = self.xPos + layoutX + addX - 1
+	local finalY = self.yPos + layoutY + addY - 1
+	self.finalX = finalX
+	self.finalY = finalY
+	term.setTextColor(colors.black)
+	paintutils.drawFilledBox(finalX,finalY,finalX+self.xLength-1,finalY+self.yLength-1,self.color)
+end
+
+function ColorField.returnData(self)
+	local toReturn = {}
+	for i,v in pairs(self) do
+		toReturn[i] = v
+	end
+	return toReturn
+end
+
+--BetterPaint Class--
+function BetterPaint.new(input)
+	local self = {}
+	setmetatable(self,{__index = BetterPaint})
+	self.xPos = input.xPos
+	self.yPos = input.yPos
+	self.name = input.name
+	self.path = input.path
+	self.xLength = input.xLength
+	self.yLength = input.yLength
+	self.returnValue = input.returnValue
+	self.label = input.label
+	self.labelBg = input.labelBg
+	self.labelFg = input.labelFg
+	self.moveX = input.moveX or false
+	self.moveY = input.moveY or false
+	return self
+end
+
+function BetterPaint.returnData(self)
+	local toReturn = {}
+	for i,v in pairs(self) do
+		toReturn[i] = v
+	end
+	return toReturn
+end
+
+function BetterPaint.draw(self,layoutX,layoutY,addX,addY)
+	if layoutX == nil then layoutX = 0 end
+	if layoutY == nil then layoutY = 0 end
+	if self.moveX then
+		if laddX == nil then addX = 0 end
+	else
+		addX = 0
+	end
+	if self.moveY then
+		if addY == nil then addY = 0 end
+	else
+		addY = 0
+	end
+	local finalX = self.xPos + layoutX + addX - 1
+	local finalY = self.yPos + layoutY + addY - 1
+	self.finalX = finalX
+	self.finalY = finalY
+	paint.drawImage(self.path,finalX,finalY)
+	term.setCursorPos(finalX,finalY+self.yLength+1)
+	term.setTextColor(self.labelFg)
+	term.setBackgroundColor(self.labelBg)
+	term.write(self.label)
+end
+
+--Text Class--
+function Text.new(input)
+	local self = {}
+	setmetatable(self,{__index = Text})
+	self.name = input.name
+	self.text = input.text
+	self.xPos = input.xPos
+	self.yPos = input.yPos
+	self.bgColor = input.bgColor
+	self.fgColor = input.fgColor
+	self.moveX = input.moveX or false
+	self.moveY = input.moveY or false
+	return self
+end
+
+function Text.draw(self,layoutX,layoutY,addX,addY)
+	if layoutX == nil then layoutX = 0 end
+	if layoutY == nil then layoutY = 0 end
+	if self.moveX then
+		if laddX == nil then addX = 0 end
+	else
+		addX = 0
+	end
+	if self.moveY then
+		if addY == nil then addY = 0 end
+	else
+		addY = 0
+	end
+	local finalX = self.xPos + layoutX + addX - 1
+	local finalY = self.yPos + layoutY + addY - 1
+	self.finalX = finalX
+	self.finalY = finalY
+	term.setCursorPos(finalX,finalY)
+	term.setTextColor(self.fgColor)
+	term.setBackgroundColor(self.bgColor)
+	term.write(self.text)
+end
+
+function Text.returnData(self)
+	local toReturn = {}
+	for i,v in pairs(self) do
+		toReturn[i] = v
+	end
+	return toReturn
+end
+
+--TextBox Class 
+
+function TextBox.new(input)
+	local self = {}
+	setmetatable(self,{__index = TextBox})
+	self.name = input.name
+	self.helpText = input.helpText
+	self.xPos = input.xPos
+	self.yPos = input.yPos
+	self.xLength = input.xLength
+	self.yLength = input.yLength
+	self.bgColor = input.bgColor
+	self.fgColor = input.fgColor
+	self.helpFgColor = input.helpFgColor
+	self.charLimit = input.charLimit
+	self.moveX = input.moveX or false
+	self.moveY = input.moveY or false
+	self.text = ""
+	self.returnValue = input.returnValue
+	self.confidential = input.confidential or false
+	return self
+end
+
+function TextBox.returnData(self)
+	local toReturn = {}
+	for i,v in pairs(self) do
+		toReturn[i] = v
+	end
+	return toReturn
+end
+
+function TextBox.draw(self,layoutX,layoutY,addX,addY)
+	if layoutX == nil then layoutX = 0 end
+	if layoutY == nil then layoutY = 0 end
+	if self.moveX then
+		if laddX == nil then addX = 0 end
+	else
+		addX = 0
+	end
+	if self.moveY then
+		if addY == nil then addY = 0 end
+	else
+		addY = 0
+	end
+	local finalX = self.xPos + layoutX + addX - 1
+	local finalY = self.yPos + layoutY + addY - 1
+	self.finalX = finalX
+	self.finalY = finalY
+	paintutils.drawFilledBox(finalX,finalY,finalX+self.xLength-1,finalY+self.yLength-1,self.bgColor)
+	term.setBackgroundColor(self.bgColor)
+	term.setCursorPos(self.finalX,self.finalY)
+	if self.text == "" or self.confidential then
+		term.setTextColor(self.helpFgColor)
+		term.write(self.helpText)
+	else
+		term.setTextColor(self.fgColor)
+		term.write(self.text)
+	end
+end
+
+function TextBox.read(self,_sReplaceChar, _tHistory)
+	paintutils.drawFilledBox(self.finalX,self.finalY,self.finalX+self.xLength-1,self.finalY+self.yLength-1,self.bgColor)
+	term.setTextColor(self.fgColor)
+	term.setCursorPos(self.finalX,self.finalY)
+	term.setCursorBlink( true )
+
+    local sLine = ""
+    local nHistoryPos
+    local nPos = 0
+    if _sReplaceChar then
+        _sReplaceChar = string.sub( _sReplaceChar, 1, 1 )
+    end
+    
+    local w = term.getSize()
+    local sx = term.getCursorPos()
+    
+    local function redraw( _sCustomReplaceChar )
+        local nScroll = 0
+        if sx + nPos >= w then
+            nScroll = (sx + nPos) - w
+        end
+
+        local cx,cy = term.getCursorPos()
+        term.setCursorPos( sx, cy )
+        local sReplace = _sCustomReplaceChar or _sReplaceChar
+        if sReplace then
+            term.write( string.rep( sReplace, math.max( string.len(sLine) - nScroll, 0 ) ) )
+        else
+            term.write( string.sub( sLine, nScroll + 1 ) )
+        end
+        term.setCursorPos( sx + nPos - nScroll, cy )
+    end
+    
+    while true do
+        local sEvent, param = os.pullEvent()
+        if sEvent == "char" then
+            -- Typed key
+            sLine = string.sub( sLine, 1, nPos ) .. param .. string.sub( sLine, nPos + 1 )
+            nPos = nPos + 1
+            redraw()
+
+        elseif sEvent == "paste" then
+            -- Pasted text
+            sLine = string.sub( sLine, 1, nPos ) .. param .. string.sub( sLine, nPos + 1 )
+            nPos = nPos + string.len( param )
+            redraw()
+
+        elseif sEvent == "key" then
+            if param == keys.enter then
+                -- Enter
+                break
+                
+            elseif param == keys.left then
+                -- Left
+                if nPos > 0 then
+                    nPos = nPos - 1
+                    redraw()
+                end
+                
+            elseif param == keys.right then
+                -- Right                
+                if nPos < string.len(sLine) then
+                    redraw(" ")
+                    nPos = nPos + 1
+                    redraw()
+                end
+            
+            elseif param == keys.up or param == keys.down then
+                -- Up or down
+                if _tHistory then
+                    redraw(" ")
+                    if param == keys.up then
+                        -- Up
+                        if nHistoryPos == nil then
+                            if #_tHistory > 0 then
+                                nHistoryPos = #_tHistory
+                            end
+                        elseif nHistoryPos > 1 then
+                            nHistoryPos = nHistoryPos - 1
+                        end
+                    else
+                        -- Down
+                        if nHistoryPos == #_tHistory then
+                            nHistoryPos = nil
+                        elseif nHistoryPos ~= nil then
+                            nHistoryPos = nHistoryPos + 1
+                        end                        
+                    end
+                    if nHistoryPos then
+                        sLine = _tHistory[nHistoryPos]
+                        nPos = string.len( sLine ) 
+                    else
+                        sLine = ""
+                        nPos = 0
+                    end
+                    redraw()
+                end
+            elseif param == keys.backspace then
+                -- Backspace
+                if nPos > 0 then
+                    redraw(" ")
+                    sLine = string.sub( sLine, 1, nPos - 1 ) .. string.sub( sLine, nPos + 1 )
+                    nPos = nPos - 1                    
+                    redraw()
+                end
+            elseif param == keys.home then
+                -- Home
+                redraw(" ")
+                nPos = 0
+                redraw()        
+            elseif param == keys.delete then
+                -- Delete
+                if nPos < string.len(sLine) then
+                    redraw(" ")
+                    sLine = string.sub( sLine, 1, nPos ) .. string.sub( sLine, nPos + 2 )                
+                    redraw()
+                end
+            elseif param == keys["end"] then
+                -- End
+                redraw(" ")
+                nPos = string.len(sLine)
+                redraw()
+            end
+
+        elseif sEvent == "term_resize" then
+            -- Terminal resized
+            w = term.getSize()
+            redraw()
+
+        end
+    end
+
+    local cx, cy = term.getCursorPos()
+    term.setCursorBlink( false )
+    term.setCursorPos( w + 1, cy )
+    print()
+    
+    return sLine
+end
+
+--Event handler function--
+eventHandler = function(self)
+	while true do
+		local event, p1, p2, p3, p4, p5, p6 = os.pullEvent()
+		if event == "mouse_click" then
+			for i,v in pairs(self.Button) do
+				if v.finalX <= p2 and p2 <= v.finalX + v.xLength-1 and v.finalY <= p3 and p3 <= v.finalY + v.yLength-1 then
+					return {"Button",tostring(v.returnValue)}
+				end
+			end
+			for i,v in pairs(self.Toggle) do
+				if v.finalX <= p2 and p2 <= v.finalX + 3 and v.finalY == p3 then
+					return {"Toggle",tostring(v.returnValue)}
+				end
+			end
+			for i,v in pairs(self.BetterPaint) do 
+				if v.finalX <= p2 and p2 <= v.finalX + v.xLength-1 and v.finalY <= p3 and p3 <= v.finalY + v.yLength-1 then
+					return {"Button",tostring(v.returnValue)}
+				end
+			end
+			for i,v in pairs(self.TextBox) do 
+				if v.finalX <= p2 and p2 <= v.finalX + v.xLength-1 and v.finalY <= p3 and p3 <= v.finalY + v.yLength-1 then
+					return {"TextBox",tostring(v.returnValue)}
+				end
+			end
+			if self.nilClick then
+				if not (self.xPos <= p2 and p2 <= self.xPos+self.xLength-1 and self.yPos <= p3 and p3 <= self.yPos+self.yLength-1) then
+					return {"Nil","Nil"}
+				end
+			end
+		elseif event == "key" then
+			
+		elseif event == "monitor_touch" then
+			os.queueEvent("mouse_click", p1, p2, p3, p4, p5, p6)
+		end
+	end
+end
+
+--Load Function--
+function Initialize()
+	local toReturn = {}
+	toReturn.Button = Button
+	toReturn.Layout = Layout
+	toReturn.Toggle = Toggle
+	toReturn.BackgroundColor = BackgroundColor
+	toReturn.ColorField = ColorField
+	toReturn.BetterPaint = BetterPaint
+	toReturn.Text = Text
+	toReturn.TextBox = TextBox
+	toReturn.eventHandler = eventHandler
+	toReturn.loadObjects = loadObjects
+	toReturn.loadLayout = loadLayout
+	return toReturn
+end
