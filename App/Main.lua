@@ -73,15 +73,17 @@ local function initializeLayouts()
 end
 
 local function unserialize( s )
-    local func = loadstring( "return "..s, "unserialize" )
-    if func then
-        setfenv( func, setmetatable({},{__index = _G}) )
-        local ok, result = pcall( func )
-        if ok then
-            return result
-        end
-    end
-    return nil
+	local func, err = loadstring( "return "..s, "unserialize" )
+	if func then
+		setfenv( func, setmetatable({},{__index = _G}) )
+		local ok, result = pcall( func )
+		if ok then
+			return result
+		end
+	else
+		print(err)
+	end
+	return nil
 end
 
 --Code--
