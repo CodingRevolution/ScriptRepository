@@ -13,9 +13,10 @@ local event = {}
 local Description = {}
 
 
---Functions--
 
-function parse(sText,sPattern)
+
+--Functions--
+local function parse(sText,sPattern)
 	local tBuffer = {}
 	if not type(sText) == "string" then
 		error("Expected string, got "..type(sText),2)
@@ -26,20 +27,37 @@ function parse(sText,sPattern)
 	return tBuffer
 end
 
-function clear()
+local function clear()
 	term.setBackgroundColor(colors.white)	
 	term.setTextColor(colors.black)
 	term.setCursorPos(1,1)
 	term.clear()
 end
 
-function nicePrint(tInput,sElement,nIndent,yPos)
+local function nicePrint(tInput,sElement,nIndent,yPos)
 	if tInput[sElement] == nil then error("Nil",2) end
 	term.setCursorPos(nIndent,yPos)
 	print(sElement..": "..tInput[sElement])
 end
 
+local function loadWebAPI(sWebAddress,sAPIname)
+    local env = setmetatable({}, { __index = _G })
+    local func, err = loadstring(http.get(sWebAddress).readAll())
+    if not func or err then
+      return false, err
+    end
+    setfenv(func, env)
+    func()
+    local api = {}
+    for k,v in pairs(env) do
+      api[k] =  v
+    end
+    _G[sAPIname] = api
+    return true
+  end
 --Code--
+if not Interact then loadWebAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
+
 clear()
 term.write("Please wait, fetching data...")
 getList = http.get("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/List")
