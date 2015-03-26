@@ -67,7 +67,7 @@ local function unserialize( s )
 	if func then
 		local env = {}
 		setmetatable(env,{__index = _G})
-		setfenv( func, env ) )
+		setfenv( func, env )
 		local ok, result = pcall( func )
 		if ok then
 			return result
