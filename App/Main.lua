@@ -59,7 +59,7 @@ local web = {
 local function loadLayouts()
 	for i,v in pairs(Lists.Layouts) do
 		print(i)
-		print(v)
+		print("yeh"..v)
 		Buffers.Layouts[i] = web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v)
 	end
 end
