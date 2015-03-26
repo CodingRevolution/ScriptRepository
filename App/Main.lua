@@ -8,7 +8,7 @@
 --Variables--
 local Lists = {
 	Layouts = {
-		Main = "Main.lua",
+		Main = "Main.layout",
 	},
 }
 local Buffers = {
