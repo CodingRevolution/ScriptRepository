@@ -5,8 +5,13 @@
 ]]--
 
 
---Variables--\
+--Variables--
+
+--Strings
 local gui = Interact:Initialize()
+local w,h = term.getSize()
+
+--Tables
 local Lists = {
 	Layouts = {
 		Main = "Main.layout",
@@ -59,17 +64,27 @@ local web = {
 
 local function loadLayouts()
 	for i,v in pairs(Lists.Layouts) do
-		Buffers.Layouts[i] = web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v)
+		Buffers.Layouts[i] = unserialize(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v))
 	end
 end
 
-
-function initializeLayouts()
+local function initializeLayouts()
 	gui.loadObjects()
 end
+
+local function unserialize( s )
+    local func = loadstring( "return "..s, "unserialize" )
+    if func then
+        setfenv( func, setmetatable({},{__index = _G}) )
+        local ok, result = pcall( func )
+        if ok then
+            return result
+        end
+    end
+    return nil
+end
+
 --Code--
 print("Working")
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 loadLayouts()
-
-print(textutils.serialize(Buffers.Layouts))
