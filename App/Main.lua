@@ -34,27 +34,21 @@ local function clear()
 	term.clear()
 end
 
-local function nicePrint(tInput,sElement,nIndent,yPos)
-	if tInput[sElement] == nil then error("Nil",2) end
-	term.setCursorPos(nIndent,yPos)
-	print(sElement..": "..tInput[sElement])
-end
-
 local function loadWebAPI(sWebAddress,sAPIname)
-    local env = setmetatable({}, { __index = _G })
-    local func, err = loadstring(http.get(sWebAddress).readAll())
-    if not func or err then
-      return false, err
-    end
-    setfenv(func, env)
-    func()
-    local api = {}
-    for k,v in pairs(env) do
-      api[k] =  v
-    end
-    _G[sAPIname] = api
-    return true
-  end
+	local env = setmetatable({}, { __index = _G })
+	local func, err = loadstring(http.get(sWebAddress).readAll())
+	if not func or err then
+	  return false, err
+	end
+	setfenv(func, env)
+	func()
+	local api = {}
+	for k,v in pairs(env) do
+	  api[k] =  v
+	end
+	_G[sAPIname] = api
+	return true
+end
 --Code--
 if not Interact then loadWebAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 
