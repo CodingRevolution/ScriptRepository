@@ -1,7 +1,14 @@
 return {
 	ColorField = {
 		Top = {
-			test
-		}
+			name = "Top",
+			xPos = 1,
+			yPos = 1,
+			xLength = w,
+			yLength = 3,
+			color = colors.orange,
+			moveX = false,
+			moveY = false,
+		},
 	}
 }
