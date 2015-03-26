@@ -5,7 +5,8 @@
 ]]--
 
 
---Variables--
+--Variables--\
+local gui = Interact:Initialize()
 local Lists = {
 	Layouts = {
 		Main = "Main.layout",
@@ -58,13 +59,14 @@ local web = {
 
 local function loadLayouts()
 	for i,v in pairs(Lists.Layouts) do
-		print("reboot")
-		print(i)
-		print(v)
 		Buffers.Layouts[i] = web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v)
 	end
 end
 
+
+function initializeLayouts()
+	gui.loadObjects()
+end
 --Code--
 print("Working")
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
