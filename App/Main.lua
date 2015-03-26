@@ -62,16 +62,6 @@ local web = {
 	end,
 }
 
-local function loadLayouts()
-	for i,v in pairs(Lists.Layouts) do
-		Buffers.Layouts[i] = unserialize(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v))
-	end
-end
-
-local function initializeLayouts()
-	gui.loadObjects()
-end
-
 local function unserialize( s )
 	local func, err = loadstring( "return "..s, "unserialize" )
 	if func then
@@ -84,6 +74,18 @@ local function unserialize( s )
 	print(err)
 	return nil
 end
+
+local function loadLayouts()
+	for i,v in pairs(Lists.Layouts) do
+		Buffers.Layouts[i] = unserialize(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v))
+	end
+end
+
+local function initializeLayouts()
+	gui.loadObjects()
+end
+
+
 
 --Code--
 print("Working")
