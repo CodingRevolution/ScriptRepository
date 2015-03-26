@@ -8,8 +8,11 @@
 --Variables--
 Lists = {
 	Layouts = {
-		"Main.lua",
-	}
+		Main = "Main.lua",
+	},
+}
+Buffers = {
+	Layouts = {},
 }
 
 --Functions--
@@ -53,9 +56,12 @@ local web = {
 }
 
 local function loadLayouts()
-
+	for i,v in pairs(Lists.Layouts) do
+		Buffers.Layouts[i] = web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v)
+	end
 end
 
 --Code--
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 
+print(textutils.serialize(Buffers.Layouts))
