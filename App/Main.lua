@@ -6,11 +6,11 @@
 
 
 --Variables--
-local getList
-local List
-local position = 1
-local event = {}
-local Description = {}
+Lists = {
+	Layouts = {
+		"Main.lua",
+	}
+}
 
 --Functions--
 local function parse(sText,sPattern)
@@ -48,12 +48,13 @@ local web = {
 		return true
 	end,
 	loadFile = function(sWebAddress)
-
+		return http.get(sWebAddress).readAll()
 	end,
 }
 
+local function loadLayouts()
 
-
+end
 
 --Code--
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
