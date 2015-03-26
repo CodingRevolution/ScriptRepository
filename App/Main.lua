@@ -51,8 +51,8 @@ local web = {
 		return true
 	end,
 	loadFile = function(sWebAddress)
-		return http.get(sWebAddress).readAll()
 		print("hi")
+		return http.get(sWebAddress).readAll()
 	end,
 }
 
