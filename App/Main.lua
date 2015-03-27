@@ -5,7 +5,6 @@
 ]]--
 --Initialize Stuff--
 
-
 --Variables--
 
 --Strings
