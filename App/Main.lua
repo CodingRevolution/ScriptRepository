@@ -44,12 +44,16 @@ end
 
 local web = {
 	loadAPI = function(sWebAddress,sAPIname)
+		if not type(sWebAddress) == "string" then error("Expected string, got "..type(sWebAddress),2) end
+		if not type(sAPIname) == "string" then error("Expected string, got "..type(sAPIname),2) end
 		local env = setmetatable({}, { __index = _G })
-		local func, err = loadstring(http.get(sWebAddress).readAll())
-		if not func or err then
-		  return false, err
+		local func, err = loadstring(http.get(sWebAddress).readAll(),sAPIname)
+		if (not func) or err then
+			error(err)
+			return false, err
 		end
 		setfenv(func, env)
+		error("wowo")
 		func()
 		local api = {}
 		for k,v in pairs(env) do
@@ -64,7 +68,7 @@ local web = {
 }
 
 local function unserialize( s )
-	local func, err = loadstring( "return "..s, "unserialize" )
+	local func, err = loadstring( "return df"..s, "unserialize" )
 	if func then
 		local env = {}
 		setmetatable(env,{__index = _G})
