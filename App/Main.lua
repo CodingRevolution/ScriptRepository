@@ -67,7 +67,7 @@ local web = {
 }
 
 local function unserialize( s )
-	local func, err = loadstring( "return df"..s, "unserialize" )
+	local func, err = loadstring( "return "..s, "unserialize" )
 	if func then
 		local env = {}
 		setmetatable(env,{__index = _G})
@@ -93,8 +93,8 @@ print("Working")
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 gui = Interact:Initialize()
 loadLayouts()
-print(textutils.serialize(Buffers.Layouts))
-print(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/Main.layout"))
+--print(textutils.serialize(Buffers.Layouts))
+--print(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/Main.layout"))
 
 --Layouts--
 MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
