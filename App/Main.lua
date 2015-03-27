@@ -94,6 +94,7 @@ if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolu
 gui = Interact:Initialize()
 loadLayouts()
 print(textutils.serialize(Buffers.Layouts))
+print(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/Main.layout"))
 
 --Layouts--
 MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
