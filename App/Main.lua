@@ -98,3 +98,5 @@ gui = Interact:Initialize()
 
 loadLayouts()
 initializeLayouts()
+
+Layouts.Main:draw()
