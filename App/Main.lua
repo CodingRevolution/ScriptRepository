@@ -49,11 +49,9 @@ local web = {
 		local env = setmetatable({}, { __index = _G })
 		local func, err = loadstring(http.get(sWebAddress).readAll(),sAPIname)
 		if (not func) or err then
-			error(err)
 			return false, err
 		end
 		setfenv(func, env)
-		error("wowo")
 		func()
 		local api = {}
 		for k,v in pairs(env) do
