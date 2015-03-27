@@ -83,20 +83,15 @@ local function loadLayouts()
 	end
 end
 
-local function initializeLayouts()
-	for i,v in pairs(Buffers.Layouts) do
-		Layouts[i] = gui.loadObjects(v)
-	end
-end
-
 --Code--
 
 --Initializing Stuff
 print("Working")
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 gui = Interact:Initialize()
-
 loadLayouts()
-initializeLayouts()
 
-Layouts.Main:draw()
+--Layouts--
+local MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
+loadLayout(Buffers.Layouts.Main,MainLayout)
+MainLayout:draw()
