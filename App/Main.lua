@@ -93,3 +93,4 @@ end
 print("Working")
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 loadLayouts()
+initializeLayouts()
