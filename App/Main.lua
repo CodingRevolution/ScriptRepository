@@ -4,12 +4,12 @@
 	by Creator
 ]]--
 --Initialize Stuff--
-if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
+
 
 --Variables--
 
 --Strings
-local gui = Interact:Initialize()
+local gui = {}
 local w,h = term.getSize()
 
 --Tables
@@ -91,6 +91,11 @@ local function initializeLayouts()
 end
 
 --Code--
+
+--Initializing Stuff
 print("Working")
+if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
+gui = Interact:Initialize()
+
 loadLayouts()
 initializeLayouts()
