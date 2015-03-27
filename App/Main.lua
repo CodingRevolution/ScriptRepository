@@ -77,7 +77,6 @@ local function unserialize( s )
 			return result
 		end
 	end
-	print(err)
 	return nil
 end
 
