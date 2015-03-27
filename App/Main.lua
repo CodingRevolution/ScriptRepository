@@ -10,6 +10,7 @@
 --Strings
 local gui = {}
 local w,h = term.getSize()
+local MainLayout = {}
 
 --Tables
 local Lists = {
@@ -92,6 +93,6 @@ gui = Interact:Initialize()
 loadLayouts()
 
 --Layouts--
-local MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
+MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
 gui.loadLayout(Buffers.Layouts.Main,MainLayout)
 MainLayout:draw()
