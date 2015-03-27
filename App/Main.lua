@@ -6,7 +6,6 @@
 --Initialize Stuff--
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 
-
 --Variables--
 
 --Strings
