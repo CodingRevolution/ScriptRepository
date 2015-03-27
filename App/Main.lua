@@ -75,6 +75,8 @@ local function unserialize( s )
 		local ok, result = pcall( func )
 		if ok then
 			return result
+		else
+			print(err)
 		end
 	end
 	return nil
