@@ -19,9 +19,10 @@ local Lists = {
 	},
 }
 local Buffers = {
-	Layouts = {},
+	Layouts = {
+		Main = {},
+	},
 }
-local Layouts = {}
 
 --Functions--
 local function parse(sText,sPattern)
@@ -93,6 +94,7 @@ print("Working")
 if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/API/Interact","Interact") end
 gui = Interact:Initialize()
 loadLayouts()
+print(textutils.serialize(Buffers.Layouts.Main))
 
 --Layouts--
 MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
