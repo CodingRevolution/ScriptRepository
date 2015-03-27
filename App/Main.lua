@@ -93,5 +93,5 @@ loadLayouts()
 
 --Layouts--
 local MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
-loadLayout(Buffers.Layouts.Main,MainLayout)
+gui.loadLayout(Buffers.Layouts.Main,MainLayout)
 MainLayout:draw()
