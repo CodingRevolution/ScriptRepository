@@ -52,26 +52,26 @@ function loadObjects(self)
 	return output
 end
 
-function loadLayout(input,output)
-	if not input then error("Input is nil!",2) end
-	if not output then error("Output is nil!",2) end
-	for i,v in pairs(input.Button) do
-		output:addButton(input.Button[i])
+function loadLayout(tInput,tOutput)
+	if not tInput then error("Input is nil!",2) end
+	if not tOutput then error("Output is nil!",2) end
+	for i,v in pairs(tInput.Button) do
+		tOutput:addButton(tInput.Button[i])
 	end
-	for i,v in pairs(input.Toggle) do
-		output:addToggle(input.Toggle[i])
+	for i,v in pairs(tInput.Toggle) do
+		tOutput:addToggle(tInput.Toggle[i])
 	end
-	for i,v in pairs(input.ColorField) do
-		output:addColorField(input.ColorField[i])
+	for i,v in pairs(tInput.ColorField) do
+		tOutput:addColorField(tInput.ColorField[i])
 	end
-	for i,v in pairs(input.BetterPaint) do
-		output:addBetterPaint(input.BetterPaint[i])
+	for i,v in pairs(tInput.BetterPaint) do
+		tOutput:addBetterPaint(tInput.BetterPaint[i])
 	end
-	for i,v in pairs(input.Text) do
-		output:addText(input.Text[i])
+	for i,v in pairs(tInput.Text) do
+		tOutput:addText(tInput.Text[i])
 	end
-	for i,v in pairs(input.TextBox) do
-		output:addTextBox(input.TextBox[i])
+	for i,v in pairs(tInput.TextBox) do
+		tOutput:addTextBox(tInput.TextBox[i])
 	end
 end
 
