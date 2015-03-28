@@ -53,6 +53,8 @@ function loadObjects(self)
 end
 
 function loadLayout(input,output)
+	if not input then error("Input is nil!",2) end
+	if not input then error("Output is nil!",2) end
 	for i,v in pairs(input.Button) do
 		output:addButton(input.Button[i])
 	end

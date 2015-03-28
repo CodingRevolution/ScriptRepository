@@ -61,8 +61,10 @@ local web = {
 		_G[sAPIname] = api
 		return true
 	end,
-	loadFile = function(sWebAddress)
-		return http.get(sWebAddress).readAll()
+	getFile = function(sWebAddress)
+		local f = http.get(sWebAddress).readAll()
+		print(f)
+		return f
 	end,
 }
 
@@ -74,7 +76,11 @@ local function unserialize( s )
 		setfenv( func, env )
 		local ok, result = pcall( func )
 		if ok then
+			print("yes")
 			return result
+		else 
+			print("no")
+			print(result)
 		end
 	end
 	print(err)
@@ -83,7 +89,9 @@ end
 
 local function loadLayouts()
 	for i,v in pairs(Lists.Layouts) do
-		Buffers.Layouts[i] = unserialize(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v))
+		print(i)
+		print(v)
+		Buffers.Layouts[i] = unserialize(web.getFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/"..v))
 	end
 end
 
@@ -95,7 +103,7 @@ if not Interact then web.loadAPI("https://raw.githubusercontent.com/CodingRevolu
 gui = Interact:Initialize()
 loadLayouts()
 --print(textutils.serialize(Buffers.Layouts))
---print(web.loadFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/Main.layout"))
+--print(web.getFile("https://raw.githubusercontent.com/CodingRevolution/ScriptRepository/master/App/Layouts/Main.layout"))
 
 --Layouts--
 MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
