@@ -107,5 +107,7 @@ loadLayouts()
 
 --Layouts--
 MainLayout = gui.Layout.new({xPos = 1,yPos = 1,xLength = w, yLength = h})
+for i,v in pairs(MainLayout) do print(i) end
+os.pullEvent()
 gui.loadLayout(Buffers.Layouts.Main,MainLayout)
 MainLayout:draw()
