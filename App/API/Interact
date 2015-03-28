@@ -53,8 +53,8 @@ function loadObjects(self)
 end
 
 function loadLayout(tInput,tOutput)
-	if not tInput then error("Input is nil!",2) end
-	if not tOutput then error("Output is nil!",2) end
+	if tInput == nil then error("Input is nil!",2) end
+	if not tOutput == nil then error("Output is nil!",2) end
 	for i,v in pairs(tInput.Button) do
 		tOutput:addButton(tInput.Button[i])
 	end
